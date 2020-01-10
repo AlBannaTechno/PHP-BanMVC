@@ -85,7 +85,7 @@ class RoutingBuilder
                 foreach ($annotations[0] as $key => $value){
                     // we will remove start and end to reduce regex iterations from 1263 -> 170
                     $pos = strpos( $value , '(');
-                    $controller_name = substr(trim(substr($value, 0,$pos -1)), 1);
+                    $controller_name = substr(trim(substr($value, 0,$pos)), 1);
                     $brc = substr($value, $pos + 1);
                     $brc = substr($brc,0, -1);
                     $annotation_list [$controller_name] = $this->get_annotations_from_string($brc);
