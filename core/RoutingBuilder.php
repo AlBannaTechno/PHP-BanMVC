@@ -16,6 +16,14 @@ class RoutingBuilder
      * []
      */
     private $_routers;
+    private static $HttpVerbs = [
+        'HttpGet',
+        'HttpPost',
+        'HttpPut',
+        'HttpDelete',
+        'HttpPatch',
+        'HttpVerb'
+    ];
     public function __construct()
     {
         $this->_routers['ControllerRouters'] = [
@@ -59,8 +67,26 @@ class RoutingBuilder
             require_once $controller;
             $classes = get_declared_classes();
             $class = end($classes);
-            $metas = $this->get_annotation_metas($class);
+            try{
+                $r = new ReflectionClass($class);
+                $className = $r->getName();
+                $doc = $r->getDocComment();
+                $metas = $this->get_annotation_metas($doc);
+                $urlName = $metas['Controller']['urlName'] ?? $className;
+                $fullPath = $controller;
+                $actions = $this->get_class_actions($r->getMethods());
 
+                // store
+                $this->_routers['ControllerRouters']['Controllers'];
+                /**
+                 * we stop here , we need to get controller name , but with provided @Controller(url="")
+                 * Like what  we done with actions
+                 * so its very big work to deal with
+                 */
+                echo 'ok';
+            }catch (Exception $ex) {
+
+            }
         }
     }
     public function build_pages(){
@@ -72,27 +98,74 @@ class RoutingBuilder
 
     private function deserialize_class_metas(array $metas) : array {
         $ds_metas = [];
+    }
+
+    /**
+     * @param array<ReflectionMethod> $methods
+     * @return array
+     */
+    private function get_class_actions(array $methods) : array {
+        $actions = [];
+        foreach ($methods as $key => $method) {
+            $docs = $method->getDocComment();
+            if ($docs){
+                [$verb , $annotations] = $this->get_action_annotations($docs);
+                if ($verb){ // http method
+                    // check on parameters
+                    $action_name = $annotations[$verb]['slug'] ?? $method->getName();
+                    $actions[$action_name] = [];
+                    $actions[$action_name]['HttpVerb'] = $verb;
+                    $actions[$action_name]['MetaDataCollection'] = $annotations;
+
+                    $actions[$action_name]['Method'] = $method->getName();
+                    $parameters = $method->getParameters();
+                    $actions[$action_name]['Parameters'] = [];
+                    $hasHttpBody = isset($annotations['HttpBodyParam']);
+                    if ($parameters){
+                        foreach ($parameters as $p_key => $param){
+                            if ($hasHttpBody && $param->getName() === $annotations['HttpBodyParam']['name']){
+                                $actions[$action_name]['HttpBodyParam'] = $param->getName();
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        return $actions;
+    }
+
+
+
+    private function get_action_annotations(string $method_doc) : array {
+        $annotations = $this->get_annotation_metas($method_doc);
+        foreach ($annotations as $verb => $values){
+            if (in_array($verb, static::$HttpVerbs, true)){
+                return [$verb , $annotations];
+            }
+        }
+        return [];
 
     }
-    private function get_annotation_metas($class) : array {
-        try {
-            $r = new ReflectionClass($class);
-            $doc = $r->getDocComment();
-            echo $doc . ' <br>';
-            preg_match_all('#@(.*?)\n#s', $doc, $annotations);
-            if ($annotations){
-                $annotation_list = [];
-                foreach ($annotations[0] as $key => $value){
-                    // we will remove start and end to reduce regex iterations from 1263 -> 170
-                    $pos = strpos( $value , '(');
-                    $controller_name = substr(trim(substr($value, 0,$pos)), 1);
-                    $brc = substr($value, $pos + 1);
-                    $brc = substr($brc,0, -1);
-                    $annotation_list [$controller_name] = $this->get_annotations_from_string($brc);
+    private function get_annotation_metas($doc) : array {
+        preg_match_all('#@(.*?)\n#s', $doc, $annotations);
+        if ($annotations){
+            $annotation_list = [];
+            foreach ($annotations[0] as $key => $value){
+                if (trim($value) === ''){
+                    continue;
                 }
-                return $annotation_list;
+                // we will remove start and end to reduce regex iterations from 1263 -> 170
+                $pos = strpos( $value , '(');
+                $class_name = substr(trim(substr($value, 0,$pos)), 1);
+                $brc = substr($value, $pos + 1);
+                $brc = substr($brc,0, -1);
+                $annotation = $this->get_annotations_from_string($brc);
+                if ($annotation){
+                    $annotation_list [$class_name] = $annotation;
+                }
             }
-        } catch (ReflectionException $e) {
+            return $annotation_list;
         }
         return [];
     }

@@ -10,5 +10,5 @@ class Controller
     /**
      * @var string
      */
-    public $name;
+    public $urlName;
 }

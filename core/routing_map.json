@@ -5,7 +5,7 @@
     "Items": [
       {
         "FullPath": "FullControllerPath",
-        "Name": "ControllerName",
+        "UrlName": "ControllerName",
         "MetaDataCollection": [
           {
             "MetaDataName": {
@@ -16,6 +16,11 @@
         ],
         "Actions": {
           "ActionName": {
+            "HttpVerb": "",
+            "HttpBodyParam": {
+              "name" : "",
+              "type" : ""
+            },
             "Parameters": {
               "parameter1Name": {
                 "DefaultValue": "",

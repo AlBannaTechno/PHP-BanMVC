@@ -116,6 +116,7 @@ function configure_core_features(Container $container){
 
     $configure_routing = static function (RoutingBuilder $routingBuilder){
         $routingBuilder->build_pages();
+        $routingBuilder->build_controllers();
     };
 
     /** @noinspection PhpParamsInspection */

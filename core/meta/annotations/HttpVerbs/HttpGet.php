@@ -6,5 +6,8 @@
  */
 class HttpGet
 {
-
+    /**
+     * @var $slug string
+     */
+    public $slug;
 }
