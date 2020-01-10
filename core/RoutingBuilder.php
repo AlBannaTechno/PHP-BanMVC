@@ -50,37 +50,71 @@ class RoutingBuilder
     public function build_controllers(): void
     {
         // load controllers
-        $controllers_location = __SPECIFICATION_APP_LOCATION__ . '/' . __DEFAULT_CONTROLLERS_PATH__ . '/*.php';
-        $controllers = glob($controllers_location);
+        $controllers_location = __SPECIFICATION_APP_LOCATION__ . '/' . __DEFAULT_CONTROLLERS_PATH__ ;
+        $controllers = regex_dir_search($controllers_location, '/.*\.php/');
+
+        // [Controller location not does not have any meaning for controller link]
+
         foreach ($controllers as $key => $controller){
             require_once $controller;
             $classes = get_declared_classes();
             $class = end($classes);
-            $this->get_class_meta($class);
-//            echo $class;
+            $metas = $this->get_annotation_metas($class);
+
         }
     }
     public function build_pages(){
         $pages_location = $this->_routers['PageRouters']['BaseDir'];
         $m = regex_dir_search($pages_location , '/.*\.php/');
         $this->_routers['PageRouters']['Pages'] =
-            $this->get_only_relative_pages_locations($m , $pages_location);
+            $this->get_only_relative_files_locations($m , $pages_location);
     }
 
-    private function get_class_meta($class){
+    private function deserialize_class_metas(array $metas) : array {
+        $ds_metas = [];
+
+    }
+    private function get_annotation_metas($class) : array {
         try {
             $r = new ReflectionClass($class);
             $doc = $r->getDocComment();
             echo $doc . ' <br>';
             preg_match_all('#@(.*?)\n#s', $doc, $annotations);
-//            print_r($annotations[1][1]);
-            return $annotations[1];
+            if ($annotations){
+                $annotation_list = [];
+                foreach ($annotations[0] as $key => $value){
+                    // we will remove start and end to reduce regex iterations from 1263 -> 170
+                    $pos = strpos( $value , '(');
+                    $controller_name = substr(trim(substr($value, 0,$pos -1)), 1);
+                    $brc = substr($value, $pos + 1);
+                    $brc = substr($brc,0, -1);
+                    $annotation_list [$controller_name] = $this->get_annotations_from_string($brc);
+                }
+                return $annotation_list;
+            }
         } catch (ReflectionException $e) {
         }
-        return '';
+        return [];
+    }
+    private function get_annotations_from_string(string $brc): array
+    {
+
+        preg_match_all('/(\s*(.+?)\s*=\s*"(.+?)"\s*),?/', $brc, $result);
+
+        return $this->key_value_map_from_arrays($result[2], $result[3]);
+    }
+    private function key_value_map_from_arrays(array $arr1, array $arr2) : array {
+        // if we will use this function in other purpose , we need to do multiple checks
+        // but here we will just use it to map $arr1,$arr2 => key,value pairs
+        // so we know exactly how much items in two arrays
+        $arr = [];
+        for ($c = 0, $cMax = count($arr1) ; $c < $cMax; $c++){
+            $arr[$arr1[$c]] = $arr2[$c];
+        }
+        return $arr;
     }
 
-    private function get_only_relative_pages_locations(array $pages_array, string $base) : array {
+    private function get_only_relative_files_locations(array $pages_array, string $base) : array {
         $pages = [];
         $l = strlen($base);
         foreach ($pages_array as $key => $page){
