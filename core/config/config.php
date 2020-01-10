@@ -1,9 +1,9 @@
 <?php
 // application directory related to core directory
-define('__SPECIFICATION_APP_LOCATION__',  '../site/');
-define('__SPECIFICATION_CORE_LOCATION__',  '../core/');
+define('__SPECIFICATION_APP_LOCATION__',  '../site');
+define('__SPECIFICATION_CORE_LOCATION__',  '../core');
 // Import secrets
-include_once __SPECIFICATION_APP_LOCATION__ . 'Secrets.php';
+include_once __SPECIFICATION_APP_LOCATION__ . '/' . 'Secrets.php';
 
 // App Root
 define('APP_ROOT', dirname(__FILE__, 2));
@@ -56,14 +56,14 @@ define('__DEFAULT_PAGE__', 'index.php');
 define('__DEFAULT_FALLBACK__DIR_PATH', 'Fallback');
 define('__DEFAULT_FALLBACK__404_PAGE__', 'page404.php');
 
-define('__DEFAULT_AREAS_PATH__','Areas/');
-define('__DEFAULT_AREA__VIEWS_PATH__','Views/');
-define('__DEFAULT_AREA__CONTROLLERS_PATH__','Controllers/');
-define('__DEFAULT_AREA__MODELS_PATH__','Models/');
-define('__DEFAULT_PAGES_PATH__','Pages/');
-define('__DEFAULT_MODELS_PATH__','models/');
-define('__DEFAULT_CONTROLLERS_PATH__','controllers/');
-define('__DEFAULT_VIEWS_PATH__','views/');
+define('__DEFAULT_AREAS_PATH__','Areas');
+define('__DEFAULT_AREA__VIEWS_PATH__','Views');
+define('__DEFAULT_AREA__CONTROLLERS_PATH__','Controllers');
+define('__DEFAULT_AREA__MODELS_PATH__','Models');
+define('__DEFAULT_PAGES_PATH__','Pages');
+define('__DEFAULT_MODELS_PATH__','models');
+define('__DEFAULT_CONTROLLERS_PATH__','controllers');
+define('__DEFAULT_VIEWS_PATH__','views');
 
 // for controllers which not belongs to an area
 define('__DEFAULT_CURRENT_CONTROLLER_NAME__', 'Home');
