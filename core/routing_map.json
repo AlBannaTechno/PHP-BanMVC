@@ -1,0 +1,82 @@
+{
+  "Controllers": {
+    "BaseUrl": "",
+    "BaseDir": "",
+    "Items": [
+      {
+        "FullPath": "FullControllerPath",
+        "Name": "ControllerName",
+        "MetaDataCollection": [
+          {
+            "MetaDataName": {
+              "Attribute1": "value",
+              "Attribute2": "value"
+            }
+          }
+        ],
+        "Actions": {
+          "ActionName": {
+            "Parameters": {
+              "parameter1Name": {
+                "DefaultValue": "",
+                "Type": ""
+              }
+            },
+            "MetaDataCollection": [
+              {
+                "MetaDataName": {
+                  "Attribute1": "value",
+                  "Attribute2": "value"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "Areas": {
+    "BaseUrl": "",
+    "BaseDir": "",
+    "Items": [
+      {
+        "DirName": "",
+        "Name": "AreaName // can retrieve from _defaults.php",
+        "Controllers": [
+          {
+            "FullPath": "FullControllerPath",
+            "Name": "ControllerName",
+            "MetaDataCollection": [
+              {
+                "MetaDataName": {
+                  "Attribute1": "value",
+                  "Attribute2": "value"
+                }
+              }
+            ],
+            "Actions": {
+              "ActionName": {
+                "Parameters": {
+                  "parameter1Name": {
+                    "DefaultValue": "",
+                    "Type": ""
+                  }
+                },
+                "MetaDataCollection": [
+                  {
+                    "MetaDataName": {
+                      "Attribute1": "value",
+                      "Attribute2": "value"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "Pages": {
+    }
+  }
+}

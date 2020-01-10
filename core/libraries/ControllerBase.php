@@ -29,7 +29,7 @@ abstract class ControllerBase {
         if ($name) {
             $this->model_name = $name;
         }
-        require_once __SPECIFICATION_APP_LOCATION__ . __DEFAULT_CONTROLLERS_PATH__  . '/'  . $this->model_name . '.php';
+        require_once __SPECIFICATION_APP_LOCATION__ . '/' . __DEFAULT_CONTROLLERS_PATH__  . '/'  . $this->model_name . '.php';
     }
 
     protected function setActionTitle(string $title): void
@@ -52,7 +52,7 @@ abstract class ControllerBase {
             }
         }
         // static::class : get class who called this method /
-        $view = __SPECIFICATION_APP_LOCATION__ . __DEFAULT_VIEWS_PATH__ . static::class . '/' . $view . '.php';
+        $view = __SPECIFICATION_APP_LOCATION__ . '/' . __DEFAULT_VIEWS_PATH__ . '/' . static::class . '/' . $view . '.php';
         if (file_exists($view)){
             $GLOBALS[__GLOB__BODY__] = $this->render_php($view, $model);
             $GLOBALS[__GLOB__CONTROLLER_TITLE__] = $this->title;
@@ -76,10 +76,10 @@ abstract class ControllerBase {
 
     private function get_current_layout(): ?string
     {
-        $layout = __SPECIFICATION_APP_LOCATION__ . __DEFAULT_VIEWS_PATH__ . static::class . '/' . __LAYOUT__;
+        $layout = __SPECIFICATION_APP_LOCATION__ . '/' .__DEFAULT_VIEWS_PATH__ . '/' . static::class . '/' . __LAYOUT__;
         if (file_exists($layout)){
             return $layout;
         }
-        return  __SPECIFICATION_APP_LOCATION__ . __DEFAULT_VIEWS_PATH__ . __LAYOUT__;
+        return  __SPECIFICATION_APP_LOCATION__ . '/' . __DEFAULT_VIEWS_PATH__  . '/' . __LAYOUT__;
     }
 }

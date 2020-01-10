@@ -28,7 +28,7 @@ class CoresProvider
 //                        break;
                     }
                 } else {
-                    $page = __SPECIFICATION_APP_LOCATION__ . __DEFAULT_PAGES_PATH__ . __DEFAULT_PAGE__;
+                    $page = __SPECIFICATION_APP_LOCATION__ . '/' . __DEFAULT_PAGES_PATH__ . '/' . __DEFAULT_PAGE__;
                     if (file_exists($page)) {
                         include_once $page;
                         return;
@@ -52,23 +52,23 @@ class CoresProvider
             }
         }
 
-        include_once __SPECIFICATION_APP_LOCATION__ . __DEFAULT_FALLBACK__DIR_PATH . '/' . __DEFAULT_FALLBACK__404_PAGE__;
+        include_once __SPECIFICATION_APP_LOCATION__ . '/' . __DEFAULT_FALLBACK__DIR_PATH . '/' . __DEFAULT_FALLBACK__404_PAGE__;
 
     }
 
     private function check_area_available($area): bool
     {
-        return is_dir(__SPECIFICATION_APP_LOCATION__ . __DEFAULT_AREAS_PATH__  . $this->_areaMapper->real_area(ucwords($area)));
+        return is_dir(__SPECIFICATION_APP_LOCATION__ . '/' . __DEFAULT_AREAS_PATH__ . '/'  . $this->_areaMapper->real_area(ucwords($area)));
     }
 
     private function check__single_controller_available($controller): bool
     {
-        return file_exists(__SPECIFICATION_APP_LOCATION__ . __DEFAULT_CONTROLLERS_PATH__ . ucwords($controller) . '.php');
+        return file_exists(__SPECIFICATION_APP_LOCATION__ . '/' . __DEFAULT_CONTROLLERS_PATH__ . '/' . ucwords($controller) . '.php');
     }
 
     private function check_with_include_single_page($pagePath): bool
     {
-        $page = __SPECIFICATION_APP_LOCATION__ . __DEFAULT_PAGES_PATH__ . $pagePath . '.php';
+        $page = __SPECIFICATION_APP_LOCATION__ . '/' . __DEFAULT_PAGES_PATH__ . '/' . $pagePath . '.php';
         if(file_exists($page)){
             include_once $page;
             return true;

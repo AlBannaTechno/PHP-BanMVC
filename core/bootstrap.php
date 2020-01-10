@@ -28,24 +28,24 @@ require_once 'CoresProvider.php';
 if (__CORE_FEATURES_SUPPORT_AREA__){
     spl_autoload_register(static function($className){
         $file = 'librariesArea/' . $className . '.php';
-        if (file_exists(__SPECIFICATION_CORE_LOCATION__ . '' . $file)){
+        if (file_exists(__SPECIFICATION_CORE_LOCATION__ . '/' . $file)){
             require_once $file;
             return;
         }
         $file = 'libraries/' . $className . '.php';
-        if (file_exists(__SPECIFICATION_CORE_LOCATION__ . '' . $file)) {
+        if (file_exists(__SPECIFICATION_CORE_LOCATION__ . '/' . $file)) {
             require_once $file;
             return;
         }
         $file = 'database/' . $className . '.php';
-        if (file_exists(__SPECIFICATION_CORE_LOCATION__ . '' . $file)) {
+        if (file_exists(__SPECIFICATION_CORE_LOCATION__ . '/' . $file)) {
             require_once $file;
             return;
         }
 
         // load controllers
         $file = __DEFAULT_CONTROLLERS_PATH__ . '/' . $className . '.php'  ;
-        if (file_exists(__SPECIFICATION_APP_LOCATION__ . '' . $file)) {
+        if (file_exists(__SPECIFICATION_APP_LOCATION__ . '/' . $file)) {
             require_once $file;
             return;
         }
@@ -87,11 +87,12 @@ if (__CORE_FEATURES_SUPPORT_AUTO_LOAD_WITHS_STARTUP__) {
 // here we must not include any optional helpers , only VI helpers
 // for example layout helpers will used always so we need it
 
-include __SPECIFICATION_CORE_LOCATION__ . 'helpers/layoutHelpers.php';
-include __SPECIFICATION_CORE_LOCATION__ . 'helpers/modelHelpers.php';
-include __SPECIFICATION_CORE_LOCATION__ . 'helpers/coreHelpers.php';
-include __SPECIFICATION_CORE_LOCATION__ . 'Exceptions/ModelException.php';
-include __SPECIFICATION_CORE_LOCATION__ . 'IoC/Container.php';
+include __SPECIFICATION_CORE_LOCATION__ . '/' . 'helpers/layoutHelpers.php';
+include __SPECIFICATION_CORE_LOCATION__ . '/' . 'helpers/modelHelpers.php';
+include __SPECIFICATION_CORE_LOCATION__ . '/' . 'helpers/coreHelpers.php';
+include __SPECIFICATION_CORE_LOCATION__ . '/' . 'Exceptions/ModelException.php';
+include __SPECIFICATION_CORE_LOCATION__ . '/' . 'IoC/Container.php';
+include __SPECIFICATION_CORE_LOCATION__ . '/' . 'RoutingBuilder.php';
 
 function register_core_types(Container $container){
 
@@ -108,4 +109,15 @@ function register_core_types(Container $container){
     // TODO implement provideWith
     // TODO allow optional parameters to not passed in Container
     $container->provide(AreaMapper::class, ['strictMode' => true], Container::REG_TYPE_SINGLETON);
+    $container->provide(RoutingBuilder::class, [], Container::REG_TYPE_SINGLETON);
+}
+
+function configure_core_features(Container $container){
+
+    $configure_routing = static function (RoutingBuilder $routingBuilder){
+        $routingBuilder->build_pages();
+    };
+
+    /** @noinspection PhpParamsInspection */
+    $configure_routing($container->resolve(RoutingBuilder::class));
 }

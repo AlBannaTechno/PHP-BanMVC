@@ -36,7 +36,7 @@ abstract class AreaControllerBase {
         if ($name) {
             $this->model_name = $name;
         }
-        require_once __SPECIFICATION_APP_LOCATION__ . __DEFAULT_AREAS_PATH__ . $this->area . '/' . __DEFAULT_AREA__MODELS_PATH__ . $this->model_name . '.php';
+        require_once __SPECIFICATION_APP_LOCATION__ . '/' . __DEFAULT_AREAS_PATH__ . '/' . $this->area . '/' . __DEFAULT_AREA__MODELS_PATH__ . '/' . $this->model_name . '.php';
     }
 
     protected function setActionTitle(string $title): void
@@ -60,7 +60,7 @@ abstract class AreaControllerBase {
         }
         // static::class : get class who called this method /
 //        $view = __SPECIFICATION_CORE_LOCATION__ . 'views/' . static::class . '/' . $view . '.php';
-        $view = __SPECIFICATION_APP_LOCATION__ . __DEFAULT_AREAS_PATH__ . $this->area . '/' . __DEFAULT_AREA__VIEWS_PATH__ . static::class . '/' . $view . '.php';
+        $view = __SPECIFICATION_APP_LOCATION__ . '/' .__DEFAULT_AREAS_PATH__ . '/' . $this->area . '/' . __DEFAULT_AREA__VIEWS_PATH__ . '/' . static::class . '/' . $view . '.php';
         if (file_exists($view)){
             $GLOBALS[__GLOB__BODY__] = $this->render_php($view, $model);
             $GLOBALS[__GLOB__CONTROLLER_TITLE__] = $this->title;
@@ -87,14 +87,14 @@ abstract class AreaControllerBase {
 
         echo 'layout ', $this->area;
         // If the current Areas/AreaName/Views/ControllerName/ contains _layout : use it
-        $layout = __SPECIFICATION_APP_LOCATION__ . __DEFAULT_AREAS_PATH__ . $this->area . '/' . __DEFAULT_AREA__VIEWS_PATH__ . static::class . '/' . __LAYOUT__;
+        $layout = __SPECIFICATION_APP_LOCATION__ . '/' . __DEFAULT_AREAS_PATH__ . '/' . $this->area . '/' . __DEFAULT_AREA__VIEWS_PATH__ . '/' . static::class . '/' . __LAYOUT__;
         if (file_exists($layout)) {
             include_once $layout;
             return;
         }
 
         // If Areas/AreaName/Views/  contains _layout : use it
-        $layout = __SPECIFICATION_APP_LOCATION__ . __DEFAULT_AREAS_PATH__ . $this->area . '/' . __DEFAULT_AREA__VIEWS_PATH__  . __LAYOUT__;
+        $layout = __SPECIFICATION_APP_LOCATION__ . '/'  . __DEFAULT_AREAS_PATH__ . '/' . $this->area . '/' . __DEFAULT_AREA__VIEWS_PATH__ . '/' . __LAYOUT__;
         if (file_exists($layout)) {
             include_once $layout;
             return;
@@ -102,7 +102,7 @@ abstract class AreaControllerBase {
 
 
         // if else include main _layout
-        $layout = __SPECIFICATION_APP_LOCATION__ . __DEFAULT_VIEWS_PATH__ . __LAYOUT__;
+        $layout = __SPECIFICATION_APP_LOCATION__ . '/' .__DEFAULT_VIEWS_PATH__ . '/' . __LAYOUT__;
         if (file_exists($layout)) {
             include_once $layout;
             return;

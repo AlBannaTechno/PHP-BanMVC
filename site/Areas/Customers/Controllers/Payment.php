@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Payment
+ * @Controller(name="Payment")
+ * @Area(name="Customers")
+ */
 class Payment extends AreaControllerBase
 {
     public function __construct($area = '')
@@ -17,7 +22,12 @@ class Payment extends AreaControllerBase
         $this->view();
     }
 
-
+    /**
+     * @param $id
+     * @param $name
+     * @param PdoDatabase $c
+     * @HttpGet()
+     */
     public function buy($id, $name, PdoDatabase $c){
         $this->setActionTitle('Buy');
         $this->view(new PaymentModel($id, $name, 55));

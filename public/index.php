@@ -6,6 +6,7 @@ $container = new Container();
 register_core_types($container);
 register_domain_types($container);
 $container->build();
+configure_core_features($container);
 configure_domain_features($container);
 $provider = $container->resolve(CoresProvider::class);
 //$provider = new CoresProvider();

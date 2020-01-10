@@ -1,6 +1,11 @@
 <?php
-include_once __SPECIFICATION_APP_LOCATION__ . 'models/AboutModel.php';
+include_once __SPECIFICATION_APP_LOCATION__ . '/' . 'models/AboutModel.php';
 
+/**
+ * Class Home
+ * @Controller(name="MyHome")
+ * @Controller(name="XSA")
+ */
 class Home extends ControllerBase
 {
     public function __construct()

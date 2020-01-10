@@ -1,8 +1,11 @@
 <?php
 namespace Helpers\Core;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use ReflectionClass;
 use ReflectionException as ReflectionExceptionAlias;
+use RegexIterator;
 
 function get_url_slugs() : array
 {
@@ -81,4 +84,20 @@ function get_area_from_controller_path(string $controller_path) : string {
     } catch (ReflectionExceptionAlias $e) {
     }
     return '';
+}
+
+/**
+ * @param $folder
+ * @param $pattern
+ * @return array
+ */
+function regex_dir_search($folder, $pattern) {
+    $dir = new RecursiveDirectoryIterator($folder);
+    $ite = new RecursiveIteratorIterator($dir);
+    $files = new RegexIterator($ite, $pattern, RegexIterator::GET_MATCH);
+    $fileList = array();
+    foreach($files as $file) {
+        $fileList = array_merge($fileList, $file);
+    }
+    return $fileList;
 }
